@@ -1,4 +1,5 @@
 require("dotenv").config();
+const http = require("http");
 const fs = require("fs");
 const cron = require("node-cron");
 const { fetchNotices } = require("./scraper");
@@ -36,5 +37,14 @@ async function runScraper() {
   }
 }
 
+const server = http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end("Scraper running");
+});
+
+
 cron.schedule("*/5 * * * *", runScraper); // every 5 mins
 runScraper(); // immediate run on start
+
+
+server.listen(process.env.PORT || 3000);
